@@ -39,8 +39,8 @@ public class HelloStartService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand");
-        msgStr = intent.getStringExtra("StartedServiceTest");
+        msgStr = intent.getStringExtra("startService");
+        Log.d(TAG, "onStartCommand getExtraString = " + msgStr);
         //对于每一个启动请求，都发送一个消息来启动一个处理
         //同时传入启动ID，以便任务完成后我们知道该终止哪一个请求。
         Message message = mServiceHandler.obtainMessage();

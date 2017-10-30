@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.serviceaidl.service.HelloBindService;
+import com.serviceaidl.service.HelloIntentService;
 import com.serviceaidl.service.HelloStartService;
 
 import butterknife.BindView;
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     Button mBtnUnBindService;
     @BindView(R.id.btnShowNumber)
     Button mBtnShowRandomNum;
+    @BindView(R.id.btnStartIntentService)
+    Button mBtnStartIntentService;
 
     private Intent mStartServiceIntent;
     private Intent mBindServiceIntent;
@@ -74,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick({R.id.btnStartService, R.id.btnStopService,
-            R.id.btnBindService, R.id.btnUnbindService, R.id.btnShowNumber})
+            R.id.btnBindService, R.id.btnUnbindService,
+            R.id.btnShowNumber, R.id.btnStartIntentService})
     public void click(View v) {
         switch (v.getId()) {
             case R.id.btnStartService:
@@ -92,9 +96,30 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btnShowNumber:
                 showRandomNumber();
                 break;
+            case R.id.btnStartIntentService:
+                startIntentService();
+                break;
             default:
                 break;
         }
+    }
+
+    private void startIntentService() {
+        //Android5.0之后必须使用显示intent来启动
+        Intent intentOne = new Intent(this, HelloIntentService.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("taskName", "task1");
+        intentOne.putExtras(bundle);
+        startService(intentOne);
+
+        Intent intentTwo = new Intent(this, HelloIntentService.class);
+        Bundle bundle2 = new Bundle();
+        bundle2.putString("taskName", "task2");
+        intentTwo.putExtras(bundle2);
+        startService(intentTwo);
+
+        startService(intentOne);  //多次启动
+
     }
 
     private void showRandomNumber() {
