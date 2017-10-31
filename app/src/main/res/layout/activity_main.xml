@@ -75,4 +75,10 @@
         android:text="StopFrontService"
         android:textAllCaps="false"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorPrimary"/>
+
+
 </LinearLayout>
