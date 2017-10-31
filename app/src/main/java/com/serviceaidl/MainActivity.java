@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.serviceaidl.service.HelloBindService;
+import com.serviceaidl.service.HelloFrontService;
 import com.serviceaidl.service.HelloIntentService;
 import com.serviceaidl.service.HelloStartService;
 
@@ -33,9 +34,14 @@ public class MainActivity extends AppCompatActivity {
     Button mBtnShowRandomNum;
     @BindView(R.id.btnStartIntentService)
     Button mBtnStartIntentService;
+    @BindView(R.id.btnStartFrontService)
+    Button mBtnStartFrontService;
+    @BindView(R.id.btnStopFrontService)
+    Button mBtnStopFrontService;
 
     private Intent mStartServiceIntent;
     private Intent mBindServiceIntent;
+    private Intent mFrontServiceIntent;
     private ServiceConnection mServiceConnection;
     private HelloBindService mHelloBinderService;
     private boolean isBound;
@@ -56,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         mStartServiceIntent = new Intent(MainActivity.this, HelloStartService.class);
         mBindServiceIntent = new Intent(MainActivity.this, HelloBindService.class);
+        mFrontServiceIntent = new Intent(this, HelloFrontService.class);
         //bindService通信使用
         mServiceConnection = new ServiceConnection() {
             @Override
@@ -78,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick({R.id.btnStartService, R.id.btnStopService,
             R.id.btnBindService, R.id.btnUnbindService,
-            R.id.btnShowNumber, R.id.btnStartIntentService})
+            R.id.btnShowNumber, R.id.btnStartIntentService,
+            R.id.btnStartFrontService, R.id.btnStopFrontService})
     public void click(View v) {
         switch (v.getId()) {
             case R.id.btnStartService:
@@ -99,9 +107,24 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btnStartIntentService:
                 startIntentService();
                 break;
+            case R.id.btnStartFrontService:
+                startFrontService();
+                break;
+            case R.id.btnStopFrontService:
+                stopFrontService();
+                break;
             default:
                 break;
         }
+    }
+
+    private void stopFrontService() {
+        stopService(mFrontServiceIntent);
+    }
+
+    private void startFrontService() {
+
+        startService(mFrontServiceIntent);
     }
 
     private void startIntentService() {

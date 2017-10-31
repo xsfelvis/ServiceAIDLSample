@@ -53,11 +53,26 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@color/colorPrimary"/>
+
     <Button
         android:id="@+id/btnStartIntentService"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="StartIntentService"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/btnStartFrontService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="StartFrontService"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/btnStopFrontService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="StopFrontService"
         android:textAllCaps="false"/>
 
 </LinearLayout>

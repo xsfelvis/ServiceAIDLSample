@@ -25,12 +25,19 @@
             android:name=".service.HelloBindService"
             android:enabled="true"
             android:exported="true"/>
-        <service android:name=".service.HelloIntentService"
-                 android:enabled="true"
-                 android:exported="true">
-                <intent-filter>
-                    <action android:name="com.serviceaidl.service"/>
-                </intent-filter>
+        <service
+            android:name=".service.HelloIntentService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.serviceaidl.service"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".service.HelloFrontService"
+            android:enabled="true"
+            android:exported="true">
         </service>
 
 
