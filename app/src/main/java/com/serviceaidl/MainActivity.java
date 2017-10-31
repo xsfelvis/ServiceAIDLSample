@@ -1,16 +1,20 @@
 package com.serviceaidl;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.appsever.IAidlService;
+import com.serviceaidl.service.HelloAidlService;
 import com.serviceaidl.service.HelloBindService;
 import com.serviceaidl.service.HelloFrontService;
 import com.serviceaidl.service.HelloIntentService;
@@ -38,13 +42,18 @@ public class MainActivity extends AppCompatActivity {
     Button mBtnStartFrontService;
     @BindView(R.id.btnStopFrontService)
     Button mBtnStopFrontService;
+    @BindView(R.id.btnStartAidlService)
+    Button mBtnStartAidlService;
 
     private Intent mStartServiceIntent;
     private Intent mBindServiceIntent;
     private Intent mFrontServiceIntent;
+    private Intent mAidlServiceInten;
     private ServiceConnection mServiceConnection;
     private HelloBindService mHelloBinderService;
     private boolean isBound;
+    private ServiceConnection mAidlServiceConnection;
+    private IAidlService mServerAidlService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         mStartServiceIntent = new Intent(MainActivity.this, HelloStartService.class);
         mBindServiceIntent = new Intent(MainActivity.this, HelloBindService.class);
         mFrontServiceIntent = new Intent(this, HelloFrontService.class);
+        mAidlServiceInten = new Intent(this, HelloAidlService.class);
         //bindService通信使用
         mServiceConnection = new ServiceConnection() {
             @Override
@@ -81,12 +91,37 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onServiceDisconnected");
             }
         };
+
+        mAidlServiceConnection = new ServiceConnection() {
+
+            //重写onServiceConnected()方法和onServiceDisconnected()方法
+            //在Activity与Service建立关联和解除关联的时候调用
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+            }
+
+            //在Activity与Service建立关联时调用
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                //使用AIDLService1.Stub.asInterface()方法将传入的IBinder对象传换成了mServerAidlService对象
+                mServerAidlService = IAidlService.Stub.asInterface(service);
+
+                try {
+                    //通过该对象调用在MyAIDLService.aidl文件中定义的接口方法,从而实现跨进程通信
+                    mServerAidlService.aidlService();
+
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
     }
 
     @OnClick({R.id.btnStartService, R.id.btnStopService,
             R.id.btnBindService, R.id.btnUnbindService,
             R.id.btnShowNumber, R.id.btnStartIntentService,
-            R.id.btnStartFrontService, R.id.btnStopFrontService})
+            R.id.btnStartFrontService, R.id.btnStopFrontService,
+            R.id.btnStartAidlService})
     public void click(View v) {
         switch (v.getId()) {
             case R.id.btnStartService:
@@ -113,9 +148,17 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btnStopFrontService:
                 stopFrontService();
                 break;
+            case R.id.btnStartAidlService:
+                startAidlService();
+                break;
             default:
                 break;
         }
+    }
+
+    private void startAidlService() {
+        Log.d(TAG, "AIDL-点击了[绑定服务]按钮");
+        bindService(mAidlServiceInten, mAidlServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     private void stopFrontService() {
