@@ -59,11 +59,5 @@
         android:layout_height="wrap_content"
         android:text="StartIntentService"
         android:textAllCaps="false"/>
-    <Button
-        android:id="@+id/btnStartFrontService"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="StartFrontService"
-        android:textAllCaps="false"/>
 
 </LinearLayout>

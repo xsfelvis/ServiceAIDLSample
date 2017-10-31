@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     Button mBtnShowRandomNum;
     @BindView(R.id.btnStartIntentService)
     Button mBtnStartIntentService;
-    @BindView(R.id.btnStartFrontService)
 
     private Intent mStartServiceIntent;
     private Intent mBindServiceIntent;
